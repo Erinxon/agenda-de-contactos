@@ -4,27 +4,24 @@ import Header from './componentes/Header'
 import BuscarContactos from './componentes/BuscarContactos'
 import BtnContactos from './componentes/BtnContactos'
 import AgregarContactos from './componentes/AgregarContactos'
+import EditarContacto from './componentes/EditarContacto'
 
 const contactos = [
-    {id: 1,nombre: 'Erinxon', apellido: 'Santana', telefono: '8253633'},
-    {id: 2,nombre: 'Erinxon', apellido: 'Santana', telefono: '8253633'},
-    {id: 3,nombre: 'Erinxon', apellido: 'Santana', telefono: '8253633'},
-    {id: 4,nombre: 'Erinxon', apellido: 'Santana', telefono: '8253633'},
-    {id: 5,nombre: 'Erinxon', apellido: 'Santana', telefono: '8253633'},
-    {id: 6,nombre: 'Erinxon', apellido: 'Santana', telefono: '8253633'},
-    {id: 7,nombre: 'Erinxon', apellido: 'Santana', telefono: '8253633'},
-    {id: 8,nombre: 'Erinxon', apellido: 'Santana', telefono: '8253633'},
-    {id: 9,nombre: 'Erinxon', apellido: 'Santana', telefono: '8253633'},
-    {id: 10,nombre: 'Erinxon', apellido: 'Santana', telefono: '8253633'},
-    {id: 11,nombre: 'Erinxon', apellido: 'Santana', telefono: '8253633'},
+  { id: 1, nombre: 'Erinxon', apellido: 'Santana', telefono: '8253633' },
+  { id: 2, nombre: 'Ariel', apellido: 'Santana', telefono: '8253633' },
+  { id: 3, nombre: 'Maria', apellido: 'Santana', telefono: '8253633' },
+  { id: 4, nombre: 'Pedro', apellido: 'Santana', telefono: '8253633' },
+  { id: 5, nombre: 'Danilo', apellido: 'Santana', telefono: '8253633' },
+  { id: 6, nombre: 'Gonzalo', apellido: 'Santana', telefono: '8253633' },
 ]
-
 
 function App() {
 
   const [name, saveName] = useState('')
   const [lastName, saveLastName] = useState('')
   const [phone, savePhone] = useState('')
+
+  const [getId, setId] = useState()
 
   const [getContactos, setContactos] = useState(contactos)
 
@@ -47,9 +44,20 @@ function App() {
 
   }
 
-  let editar = (e) => [
-    e.preventDefault()
-  ]
+  let editar = (id) => {
+    setId(id)
+    let cont = 0;
+    let arreglo = getContactos
+    arreglo.forEach((registro) => {
+      if (id === registro.id) {
+        saveName(arreglo[cont].nombre)
+        saveLastName(arreglo[cont].apellido)
+        savePhone(arreglo[cont].telefono)
+      }
+      cont++;
+    });
+
+  }
 
   function mostrarDatos() {
     return getContactos.map(contacto => (
@@ -59,7 +67,10 @@ function App() {
         <td>{contacto.apellido}</td>
         <td>{contacto.telefono}</td>
         <td>
-          <a href="" class="btn-editar" id="editar" onClick={editar}>
+          <a href="" class="btn-editar" id="editar" onClick={(e) => {
+            e.preventDefault()
+            editar(contacto.id)
+          }} data-toggle="modal" data-target="#abrir-modal-editar">
             <i className="far fa-edit mr-1"></i>Editar</a>
         </td>
         <td>
@@ -80,7 +91,7 @@ function App() {
       <section className="container mt-4">
         <div className="row justify-content-between mt-4">
           <BuscarContactos />
-          <BtnContactos/>
+          <BtnContactos />
           <div className="col-lg-12 mt-3 mb-3">
             <table className="table table-bordered">
               <thead>
@@ -109,6 +120,18 @@ function App() {
             setContactos={setContactos}
           />
         </div>
+        <EditarContacto
+          name={name}
+          saveName={saveName}
+          lastName={lastName}
+          saveLastName={saveLastName}
+          phone={phone}
+          savePhone={savePhone}
+          getContactos={getContactos}
+          setContactos={setContactos}
+          id={getId}
+          setId={setId}
+        />
       </section>
     </Fragment>
   );
