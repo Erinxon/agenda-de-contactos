@@ -22,8 +22,9 @@ function App() {
   const [phone, savePhone] = useState('')
 
   const [getId, setId] = useState()
-
   const [getContactos, setContactos] = useState(contactos)
+
+  const [getBusqueda, setBusqueda] = useState('')
 
   let eliminar = (contacto) => {
     let cont = 0;
@@ -59,29 +60,63 @@ function App() {
 
   }
 
-  function mostrarDatos() {
-    return getContactos.map(contacto => (
-      <tr key={contacto.id}>
-        <th scope="row">{contacto.id}</th>
-        <td>{contacto.nombre}</td>
-        <td>{contacto.apellido}</td>
-        <td>{contacto.telefono}</td>
-        <td>
-          <a href="" class="btn-editar" id="editar" onClick={(e) => {
-            e.preventDefault()
-            editar(contacto.id)
-          }} data-toggle="modal" data-target="#abrir-modal-editar">
-            <i className="far fa-edit mr-1"></i>Editar</a>
-        </td>
-        <td>
-          <a href="" class="btn-eliminar" id="eliminar" onClick={(e) => {
-            e.preventDefault()
-            eliminar(contacto)
-          }}>
-            <i className="fas fa-trash-alt mr-1"></i>Eliminar</a>
-        </td>
-      </tr>
-    ))
+  function mostrarContactos() {
+    if (getBusqueda.length > 0) {
+        const resultBusqueda = getContactos.filter(busqueda => {
+            if(busqueda.nombre === getBusqueda || (busqueda.nombre + ' ' + busqueda.apellido) === getBusqueda 
+              || busqueda.telefono === getBusqueda || busqueda.id == getBusqueda){
+                return busqueda
+            }
+        });
+
+        return resultBusqueda.map(contacto => (
+          <tr key={contacto.id}>
+            <th scope="row">{contacto.id}</th>
+            <td>{contacto.nombre}</td>
+            <td>{contacto.apellido}</td>
+            <td>{contacto.telefono}</td>
+            <td>
+              <a href="" class="btn-editar" id="editar" onClick={(e) => {
+                e.preventDefault()
+                editar(contacto.id)
+              }} data-toggle="modal" data-target="#abrir-modal-editar">
+                <i className="far fa-edit mr-1"></i>Editar</a>
+            </td>
+            <td>
+              <a href="" class="btn-eliminar" id="eliminar" onClick={(e) => {
+                e.preventDefault()
+                eliminar(contacto)
+              }}>
+                <i className="fas fa-trash-alt mr-1"></i>Eliminar</a>
+            </td>
+          </tr>
+        ))
+    } else 
+    {
+      return getContactos.map(contacto => (
+        <tr key={contacto.id}>
+          <th scope="row">{contacto.id}</th>
+          <td>{contacto.nombre}</td>
+          <td>{contacto.apellido}</td>
+          <td>{contacto.telefono}</td>
+          <td>
+            <a href="" class="btn-editar" id="editar" onClick={(e) => {
+              e.preventDefault()
+              editar(contacto.id)
+            }} data-toggle="modal" data-target="#abrir-modal-editar">
+              <i className="far fa-edit mr-1"></i>Editar</a>
+          </td>
+          <td>
+            <a href="" class="btn-eliminar" id="eliminar" onClick={(e) => {
+              e.preventDefault()
+              eliminar(contacto)
+            }}>
+              <i className="fas fa-trash-alt mr-1"></i>Eliminar</a>
+          </td>
+        </tr>
+      ))
+    }
+
   }
 
 
@@ -90,7 +125,10 @@ function App() {
       <Header />
       <section className="container mt-4">
         <div className="row justify-content-between mt-4">
-          <BuscarContactos />
+          <BuscarContactos
+            getBusqueda={getBusqueda}
+            setBusqueda={setBusqueda}
+          />
           <BtnContactos />
           <div className="col-lg-12 mt-3 mb-3">
             <table className="table table-bordered">
@@ -105,7 +143,7 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {getContactos.length > 0 ? mostrarDatos() : ''}
+                {getContactos.length > 0 ? mostrarContactos() : ''}
               </tbody>
             </table>
           </div>
