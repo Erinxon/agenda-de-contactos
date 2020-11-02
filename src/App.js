@@ -60,14 +60,14 @@ function App() {
         <td>{contacto.telefono}</td>
         <td>
           <a href="" class="btn-editar" id="editar" onClick={editar}>
-            <i className="far fa-edit"></i>Editar</a>
+            <i className="far fa-edit mr-1"></i>Editar</a>
         </td>
         <td>
           <a href="" class="btn-eliminar" id="eliminar" onClick={(e) => {
             e.preventDefault()
             eliminar(contacto)
           }}>
-            <i className="fas fa-trash-alt"></i>Eliminar</a>
+            <i className="fas fa-trash-alt mr-1"></i>Eliminar</a>
         </td>
       </tr>
     ))
@@ -80,7 +80,7 @@ function App() {
       <section className="container mt-4">
         <div className="row justify-content-between mt-4">
           <BuscarContactos />
-          <BtnContactos />
+          <BtnContactos/>
           <div className="col-lg-12 mt-3 mb-3">
             <table className="table table-bordered">
               <thead>
