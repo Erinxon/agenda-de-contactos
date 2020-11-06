@@ -74,3 +74,20 @@ table td{
 .btn-eliminar{
   color: red !important
 }
+
+.busqueda-invalida{
+  color: red;
+  text-align: center;
+  font-weight: bold;
+}
+
+.alert-success h4{
+  font-size: 20px !important;
+  text-align: center;
+}
+
+.lista-vacia{
+  text-align: center;
+  font-weight: bold;
+}
+

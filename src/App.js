@@ -1,113 +1,125 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 
 import Header from './componentes/Header'
 import BuscarContactos from './componentes/BuscarContactos'
 import BtnContactos from './componentes/BtnContactos'
 import AgregarContactos from './componentes/AgregarContactos'
 import EditarContacto from './componentes/EditarContacto'
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 const contactos = [
-  { id: 1, nombre: 'Erinxon', apellido: 'Santana', telefono: '8253633' },
-  { id: 2, nombre: 'Ariel', apellido: 'Santana', telefono: '8253633' },
-  { id: 3, nombre: 'Maria', apellido: 'Santana', telefono: '8253633' },
-  { id: 4, nombre: 'Pedro', apellido: 'Santana', telefono: '8253633' },
-  { id: 5, nombre: 'Danilo', apellido: 'Santana', telefono: '8253633' },
-  { id: 6, nombre: 'Gonzalo', apellido: 'Santana', telefono: '8253633' },
+  { id: 1, nombre: 'Erinxon', apellido: 'Santana', telefono: '8098523654' },
+  { id: 2, nombre: 'Maria', apellido: 'Encarnación', telefono: '8297416952' },
+  { id: 3, nombre: 'Danilo', apellido: 'Abinader', telefono: '8499513572' },
+  { id: 4, nombre: 'Luis', apellido: 'Medina', telefono: '8298521597' },
+  { id: 5, nombre: 'Gonzalo', apellido: 'Castillo', telefono: '8091234563' },
 ]
 
-function App() {
+const App = () => {
 
   const [name, saveName] = useState('')
   const [lastName, saveLastName] = useState('')
   const [phone, savePhone] = useState('')
 
   const [getId, setId] = useState()
-  const [getContactos, setContactos] = useState(contactos)
+  const [getContactos, setContactos] = useState([])
 
-  const [getBusqueda, setBusqueda] = useState('')
+  const [getBusqueda, setBusqueda] = useState([])
 
-  let eliminar = (contacto) => {
-    let cont = 0;
-    let arreglo = getContactos
-    arreglo.forEach((registro) => {
-      if (contacto.id === registro.id) {
-        arreglo.splice(cont, 1);
-      }
-      cont++;
+
+  useEffect(() => {
+    setContactos(contactos)
+  }, [])
+
+  const eliminar = (contacto) => {
+    confirmAlert({
+      title: 'Confirmar',
+      message: '¿Estás seguro que quieres eliminar este contacto?',
+      buttons: [
+        {
+          label: 'SI',
+          onClick: () => {
+            let cont = 0;
+            let arreglo = getContactos
+            arreglo.forEach((registro) => {
+              if (contacto.id === registro.id) {
+                arreglo.splice(cont, 1);
+              }
+              cont++;
+            });
+
+            let lista = []
+            for (let i = 0; i < arreglo.length; i++) {
+              lista = Array.from([...arreglo])
+            }
+            setContactos([...lista])
+          }
+        },
+        {
+          label: 'No',
+        }
+      ]
     });
-
-    let lista = []
-    for (let i = 0; i < arreglo.length; i++) {
-      lista = Array.from([...arreglo])
-    }
-
-    setContactos([...lista])
 
   }
 
-  let editar = (id) => {
+  const editar = (id) => {
     setId(id)
     let cont = 0;
-    let arreglo = getContactos
-    arreglo.forEach((registro) => {
+    let newArrayContactos = getContactos
+    newArrayContactos.forEach((registro) => {
       if (id === registro.id) {
-        saveName(arreglo[cont].nombre)
-        saveLastName(arreglo[cont].apellido)
-        savePhone(arreglo[cont].telefono)
+        saveName(newArrayContactos[cont].nombre)
+        saveLastName(newArrayContactos[cont].apellido)
+        savePhone(newArrayContactos[cont].telefono)
       }
       cont++;
     });
 
   }
 
-  function mostrarContactos() {
-    if (getBusqueda.length > 0) {
-        const resultBusqueda = getContactos.filter(busqueda => {
-            if(busqueda.nombre === getBusqueda || (busqueda.nombre + ' ' + busqueda.apellido) === getBusqueda 
-              || busqueda.telefono === getBusqueda || busqueda.id == getBusqueda){
-                return busqueda
-            }
-        });
+  const mostrarContactos = () => {
+    let listaContactos = []
 
-        return resultBusqueda.map(contacto => (
-          <tr key={contacto.id}>
-            <th scope="row">{contacto.id}</th>
-            <td>{contacto.nombre}</td>
-            <td>{contacto.apellido}</td>
-            <td>{contacto.telefono}</td>
-            <td>
-              <a href="" class="btn-editar" id="editar" onClick={(e) => {
-                e.preventDefault()
-                editar(contacto.id)
-              }} data-toggle="modal" data-target="#abrir-modal-editar">
-                <i className="far fa-edit mr-1"></i>Editar</a>
-            </td>
-            <td>
-              <a href="" class="btn-eliminar" id="eliminar" onClick={(e) => {
-                e.preventDefault()
-                eliminar(contacto)
-              }}>
-                <i className="fas fa-trash-alt mr-1"></i>Eliminar</a>
-            </td>
-          </tr>
-        ))
-    } else 
-    {
-      return getContactos.map(contacto => (
+    if (getBusqueda.length > 0) {
+      listaContactos = getContactos.filter(busqueda => {
+        if (busqueda.nombre.toLowerCase() === getBusqueda.toLowerCase()
+          || busqueda.apellido.toLowerCase() === getBusqueda.toLowerCase()
+          || (busqueda.nombre.toLowerCase() + ' ' + busqueda.apellido.toLowerCase()) === getBusqueda.toLowerCase()
+          || busqueda.telefono === getBusqueda
+          || busqueda.telefono.replace('+', '') === getBusqueda
+          || busqueda.id == getBusqueda) {
+          return busqueda
+        }
+      });
+
+    } else {
+      listaContactos = getContactos
+    }
+
+    if (getBusqueda.length > 0 && listaContactos.length === 0) {
+      return (
+        <tr key={0}>
+          <td colspan={6} className="busqueda-invalida">¡No se encontró ningun contacto que coincida con su busqueda</td>
+        </tr>
+      )
+    } else {
+      return listaContactos.map(contacto => (
         <tr key={contacto.id}>
           <th scope="row">{contacto.id}</th>
           <td>{contacto.nombre}</td>
           <td>{contacto.apellido}</td>
           <td>{contacto.telefono}</td>
           <td>
-            <a href="" class="btn-editar" id="editar" onClick={(e) => {
+            <a href="" className="btn-editar" id="editar" onClick={(e) => {
               e.preventDefault()
               editar(contacto.id)
             }} data-toggle="modal" data-target="#abrir-modal-editar">
               <i className="far fa-edit mr-1"></i>Editar</a>
           </td>
           <td>
-            <a href="" class="btn-eliminar" id="eliminar" onClick={(e) => {
+            <a href="" className="btn-eliminar" id="eliminar" onClick={(e) => {
               e.preventDefault()
               eliminar(contacto)
             }}>
@@ -116,9 +128,7 @@ function App() {
         </tr>
       ))
     }
-
   }
-
 
   return (
     <Fragment>
@@ -126,7 +136,6 @@ function App() {
       <section className="container mt-4">
         <div className="row justify-content-between mt-4">
           <BuscarContactos
-            getBusqueda={getBusqueda}
             setBusqueda={setBusqueda}
           />
           <BtnContactos />
@@ -143,7 +152,11 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {getContactos.length > 0 ? mostrarContactos() : ''}
+                {getContactos.length > 0 ? mostrarContactos() :
+                  <tr key={0}>
+                    <td colspan={6} className="lista-vacia">¡No tienes ningun contacto agregado!</td>
+                  </tr>
+                }
               </tbody>
             </table>
           </div>

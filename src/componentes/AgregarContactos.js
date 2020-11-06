@@ -1,28 +1,32 @@
 import React, { useState } from 'react';
 
-const AgregarContactos = ({name, saveName, lastName, saveLastName, phone, savePhone, getContactos, setContactos }) => {
+const AgregarContactos = ({ name, saveName, lastName, saveLastName, phone, savePhone, getContactos, setContactos }) => {
 
     const [error, guardarError] = useState(false);
+    const [contactoGuardado, setContactoGuardado] = useState(false)
+
 
     const guardarDatos = (e) => {
         e.preventDefault()
         if (name === '' || lastName === '' || phone === '') {
             guardarError(true)
             return;
-        }else{
+        } else {
             guardarError(false)
             let lista = []
-            for(let i=0;i<getContactos.length;i++){
+            for (let i = 0; i < getContactos.length; i++) {
                 lista = Array.from([...getContactos])
             }
-            setContactos([...lista,{id: getContactos.length + 1, nombre: name, apellido: lastName, telefono: phone }])
+            setContactos([...lista, { id: getContactos.length + 1, nombre: name, apellido: lastName, telefono: phone }])
+            setContactoGuardado(true)
             limpiarInput()
-            
+            eliminarAlerta()
+
         }
-        
+
     }
 
-    function limpiarInput(){
+    const limpiarInput = () => {
         document.getElementById('nombre').value = ''
         document.getElementById('apellido').value = ''
         document.getElementById('telefono').value = ''
@@ -31,9 +35,25 @@ const AgregarContactos = ({name, saveName, lastName, saveLastName, phone, savePh
         savePhone('')
     }
 
+    const alertaContactoAgregado = () => {
+        return (
+            <div className="col-lg-12 mt-3 alerta-add">
+                <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">¡Contacto agregado correctamente!</h4>
+                </div>
+            </div>
+        )   
+    }
+
+    const eliminarAlerta = () =>{
+        setTimeout(() => {
+            setContactoGuardado(false)
+        }, 2000);
+    }
+
     return (
         <div className="col-lg-12">
-            <div className="modal fade" id="abrir-modal" tabindex="-1" role="dialog"
+            <div className="modal fade" id="abrir-modal" tabIndex="1" role="dialog"
                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
@@ -75,17 +95,22 @@ const AgregarContactos = ({name, saveName, lastName, saveLastName, phone, savePh
                                         />
                                     </div>
                                     <div className="col-lg-12 mt-3 modal-footer">
-                                        <button type="button" className="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                        <button type="button" className="btn btn-danger" data-dismiss="modal" onClick={limpiarInput}>Cancelar</button>
                                         <button type="submit" className="btn btn-primary">Guardar Contacto</button>
                                     </div>
                                     {(error) ?
                                         <div className="col-lg-12 mt-3">
                                             <div className="alert alert-danger">
-                                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                            <strong>Error!</strong> Todos los campos son obligatorios
+                                                <a href="#" className="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                                <strong>¡Error!</strong> Todos los campos son obligatorios
                                             </div>
                                         </div>
-                                    : ''}
+                                        : ''}
+                                    {(contactoGuardado) ?
+                                        alertaContactoAgregado()
+
+                                        : ''}
+
                                 </div>
                             </form>
                         </div>
@@ -95,5 +120,6 @@ const AgregarContactos = ({name, saveName, lastName, saveLastName, phone, savePh
         </div>
     );
 }
+
 
 export default AgregarContactos;

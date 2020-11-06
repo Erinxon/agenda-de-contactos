@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 const EditarContacto = ({ name, saveName, lastName, saveLastName, phone, savePhone, getContactos, setContactos, id, setId }) => {
 
     const [error, guardarError] = useState(false);
+    const [contactoEditado, setContactoEditado] = useState(false)
 
     const datosContactoEditar = {
         nombre: name,
@@ -12,27 +13,30 @@ const EditarContacto = ({ name, saveName, lastName, saveLastName, phone, savePho
 
     const guardarDatos = (e) => {
         e.preventDefault()
-        if (name === '' || lastName === '' || phone === '') {
+        if (datosContactoEditar.nombre === '' || datosContactoEditar.apellido === '' || datosContactoEditar.telefono === '') {
             guardarError(true)
             return;
         } else {
             guardarError(false)
             let cont = 0;
-            let contactosEditar = getContactos
-            contactosEditar.forEach((datosContacto) => {
+            let contactoEditar = getContactos
+            contactoEditar.forEach((datosContacto) => {
                 if (id === datosContacto.id) {
-                    contactosEditar[cont].nombre = name
-                    contactosEditar[cont].apellido = lastName
-                    contactosEditar[cont].telefono = phone
+                    contactoEditar[cont].nombre = name
+                    contactoEditar[cont].apellido = lastName
+                    contactoEditar[cont].telefono = phone
                 }
                 cont++;
             });
 
-            let listaContactos = []
-            for (let i = 0; i < contactosEditar.length; i++) {
-                listaContactos = Array.from([...contactosEditar])
-            }     
-            setContactos([...listaContactos])
+            let listaContactoEditado = []
+            for (let i = 0; i < contactoEditar.length; i++) {
+                listaContactoEditado = Array.from([...contactoEditar])
+            }           
+            setContactos([...listaContactoEditado])
+            setContactoEditado(true)
+            eliminarAlerta()
+            
         }
     }
 
@@ -46,9 +50,26 @@ const EditarContacto = ({ name, saveName, lastName, saveLastName, phone, savePho
         setId(undefined)
     }
 
+    const alertaContactoEditado = () => {
+        return (
+            <div className="col-lg-12 mt-3 alerta-add">
+                <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">¡Contacto editado correctamente!</h4>
+                </div>
+            </div>
+        )   
+    }
+
+    const eliminarAlerta = () =>{
+        setTimeout(() => {
+            setContactoEditado(false)
+        }, 2000);
+    }
+
+
     return (
         <div className="col-lg-12">
-            <div className="modal fade" id="abrir-modal-editar" tabindex="-1" role="dialog"
+            <div className="modal fade" id="abrir-modal-editar" role="dialog"
                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
@@ -99,11 +120,15 @@ const EditarContacto = ({ name, saveName, lastName, saveLastName, phone, savePho
                                     {(error) ?
                                         <div className="col-lg-12 mt-3">
                                             <div className="alert alert-danger">
-                                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                                <strong>Error!</strong> Todos los campos son obligatorios
+                                                <a href="#" className="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                                <strong>¡Error!</strong> Todos los campos son obligatorios
                                             </div>
                                         </div>
-                                    : ''}
+                                        : ''}
+                                    {(contactoEditado) ?
+                                        alertaContactoEditado()
+
+                                        : ''}
                                 </div>
                             </form>
                         </div>
