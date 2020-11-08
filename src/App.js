@@ -1,12 +1,12 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react'
 
 import Header from './componentes/Header'
 import BuscarContactos from './componentes/BuscarContactos'
 import BtnContactos from './componentes/BtnContactos'
 import AgregarContactos from './componentes/AgregarContactos'
 import EditarContacto from './componentes/EditarContacto'
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import { confirmAlert } from 'react-confirm-alert'
+import 'react-confirm-alert/src/react-confirm-alert.css'
 
 const contactos = [
   { id: 1, nombre: 'Erinxon', apellido: 'Santana', telefono: '8098523654' },
