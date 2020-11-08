@@ -101,7 +101,7 @@ const App = () => {
     if (getBusqueda.length > 0 && listaContactos.length === 0) {
       return (
         <tr key={0}>
-          <td colspan={6} className="busqueda-invalida">¡No se encontró ningun contacto que coincida con su busqueda</td>
+          <td colspan={6} className="busqueda-invalida">¡No se encontró ningun contacto que coincida con su busqueda!</td>
         </tr>
       )
     } else {
