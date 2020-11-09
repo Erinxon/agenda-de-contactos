@@ -8,14 +8,6 @@ import EditarContacto from './componentes/EditarContacto'
 import { confirmAlert } from 'react-confirm-alert'
 import 'react-confirm-alert/src/react-confirm-alert.css'
 
-const contactos = [
-  { id: 1, nombre: 'Erinxon', apellido: 'Santana', telefono: '8098523654' },
-  { id: 2, nombre: 'Maria', apellido: 'Encarnación', telefono: '8297416952' },
-  { id: 3, nombre: 'Danilo', apellido: 'Abinader', telefono: '8499513572' },
-  { id: 4, nombre: 'Luis', apellido: 'Medina', telefono: '8298521597' },
-  { id: 5, nombre: 'Gonzalo', apellido: 'Castillo', telefono: '8091234563' },
-]
-
 const App = () => {
 
   const [name, saveName] = useState('')
@@ -23,13 +15,14 @@ const App = () => {
   const [phone, savePhone] = useState('')
 
   const [getId, setId] = useState()
+
   const [getContactos, setContactos] = useState([])
 
   const [getBusqueda, setBusqueda] = useState([])
 
 
   useEffect(() => {
-    setContactos(contactos)
+    setContactos(getBusqueda)
   }, [])
 
   const eliminar = (contacto) => {
@@ -146,7 +139,7 @@ const App = () => {
                   <th scope="col">Id</th>
                   <th scope="col">Nombre</th>
                   <th scope="col">Apellido</th>
-                  <th scope="col">Telefono</th>
+                  <th scope="col">Teléfono</th>
                   <th scope="col">Editar</th>
                   <th scope="col">Eliminar</th>
                 </tr>

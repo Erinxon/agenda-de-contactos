@@ -5,7 +5,6 @@ const AgregarContactos = ({ name, saveName, lastName, saveLastName, phone, saveP
     const [error, guardarError] = useState(false);
     const [contactoGuardado, setContactoGuardado] = useState(false)
 
-
     const guardarDatos = (e) => {
         e.preventDefault()
         if (name === '' || lastName === '' || phone === '') {
@@ -21,7 +20,6 @@ const AgregarContactos = ({ name, saveName, lastName, saveLastName, phone, saveP
             setContactoGuardado(true)
             limpiarInput()
             eliminarAlerta()
-
         }
 
     }
@@ -110,7 +108,6 @@ const AgregarContactos = ({ name, saveName, lastName, saveLastName, phone, saveP
                                         alertaContactoAgregado()
 
                                         : ''}
-
                                 </div>
                             </form>
                         </div>

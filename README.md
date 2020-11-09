@@ -1,4 +1,4 @@
-# Segundo Parcial de Programación 2
+# Segundo Parcial de Programación Web
 
 # Getting Started with Create React App
 
